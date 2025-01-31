@@ -1,0 +1,8 @@
+Music_Recommendation_System/
+│
+├── data/                # For datasets
+├── models/              # Saved machine learning models
+├── notebooks/           # Jupyter notebooks for experimentation
+├── api/                 # API code for serving the recommendation system
+├── scripts/             # Helper scripts for preprocessing, training, etc.
+└── main.py              # Main file for application

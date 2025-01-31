@@ -1,0 +1,581 @@
+src/
+├── assets/                # Static assets (images, icons, etc.)
+├── components/            # Vue components
+│   ├── Chat.vue           # Chat system component
+│   ├── Header.vue         # Header with search bar
+│   ├── IconBar.vue        # Sidebar or top icon bar
+│   ├── Recommendations.vue # User recommendations section
+│   ├── DeviceSpecific.vue # Phone-specific API recommendations
+│   ├── Visual3D.vue       # 3D visualization component using Three.js
+│   ├── Playlist.vue       # Component for playlist creation and display
+│   ├── Trending.vue       # Component for displaying trending songs
+│   ├── SearchBar.vue      # Component for searching songs, artists, and albums
+├── views/                 # Application views
+│   ├── HomeView.vue       # Main home view
+│   ├── RecommendationsView.vue # View for recommendations
+│   ├── PlaylistView.vue   # View for playlist management
+│   ├── SearchView.vue     # View for search results
+├── store/                 # Vuex or Pinia state management
+│   ├── index.js           # State management configuration
+│   ├── modules/           # State modules for feature-specific states
+│       ├── user.js        # User-related state
+│       ├── recommendations.js # Recommendations-related state
+│       ├── playlists.js   # Playlist-related state
+├── App.vue                # Main application component
+├── main.js                # Main JavaScript file
+public/
+└── index.html             # HTML entry file
+
+
+
+i love the color combinations and other features for the music recommendation interface, but i want something more amazing, impressive ui and layouts , impressive 3d visuals and deisigns, an interface that gives a refreshing vibe, and an interface that at first glance indicate that this is music related. for the 3d, you can use stunning visuals of music related stuffs. 
+Also, i want you yo remove the settings from the icons instead use chat to replace it. also i  want a floating chat like feature at the right bottom of the application so that when users click it, it shows the chat interface.
+
+finally, some components are not connected, so fix this. don't forget to use impressive icons to.
+
+Iconbar.vue:
+
+
+<template>
+  <div class="bg-gray-800 p-4 rounded-md shadow-md flex justify-between items-center">
+    <div class="flex space-x-4">
+      <button @click="navigateToHome" class="text-white hover:text-red-500">
+        <i class="fas fa-home"></i> Home
+      </button>
+      <button @click="navigateToRecommendations" class="text-white hover:text-red-500">
+        <i class="fas fa-star"></i> Recommendations
+      </button>
+      <button @click="navigateToPlaylists" class="text-white hover:text-red-500">
+        <i class="fas fa-music"></i> Playlists
+      </button>
+      <button @click="navigateToSearch" class="text-white hover:text-red-500">
+        <i class="fas fa-search"></i> Search
+      </button>
+    </div>
+    <button @click="navigateToSettings" class="text-white hover:text-red-500">
+      <i class="fas fa-cogs"></i> Settings
+    </button>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    navigateToHome() {
+      // Navigate to the Home page
+      this.$router.push({ name: 'home' });
+    },
+    navigateToRecommendations() {
+      // Navigate to the Recommendations page
+      this.$router.push({ name: 'recommendations' });
+    },
+    navigateToPlaylists() {
+      // Navigate to the Playlists page
+      this.$router.push({ name: 'playlists' });
+    },
+    navigateToSearch() {
+      // Navigate to the Search page
+      this.$router.push({ name: 'search' });
+    },
+    navigateToSettings() {
+      // Navigate to the Settings page (you can replace this with your actual settings route)
+      this.$router.push({ name: 'settings' });
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* Styling for the icon bar */
+button:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+}
+
+.fas {
+  margin-right: 8px;  /* Space between icon and text */
+}
+</style>
+
+
+Homeview.vue:
+<template>
+    <div>
+      <Recommendations />
+      <DeviceSpecific />
+    </div>
+  </template>
+  
+  <script>
+  import Recommendations from '../components/Recommendations.vue';
+  import DeviceSpecific from '../components/DeviceSpecific.vue';
+  
+  export default {
+    components: {
+      Recommendations,
+      DeviceSpecific,
+    },
+  };
+  </script>
+  
+Searchbar.vue:
+
+<template>
+  <div class="bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-6 rounded-3xl shadow-2xl w-full max-w-lg mx-auto">
+    <div class="bg-gray-800 p-6 rounded-xl shadow-2xl">
+      <input
+        v-model="searchQuery"
+        placeholder="Search for songs, artists, albums..."
+        class="w-full p-3 text-lg rounded-full bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+        @keyup.enter="search"
+      />
+      <ul v-if="results.songs.length > 0" class="space-y-2 mt-4">
+        <li v-for="result in results.songs" :key="result" class="bg-gray-700 p-4 rounded-xl shadow-xl">
+          <span class="text-white">Song: {{ result }}</span>
+        </li>
+      </ul>
+      <ul v-if="results.artists.length > 0" class="space-y-2 mt-4">
+        <li v-for="result in results.artists" :key="result" class="bg-gray-700 p-4 rounded-xl shadow-xl">
+          <span class="text-white">Artist: {{ result }}</span>
+        </li>
+      </ul>
+      <ul v-if="results.albums.length > 0" class="space-y-2 mt-4">
+        <li v-for="result in results.albums" :key="result" class="bg-gray-700 p-4 rounded-xl shadow-xl">
+          <span class="text-white">Album: {{ result }}</span>
+        </li>
+      </ul>
+      <div v-else class="text-gray-500 mt-4">No results found</div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      searchQuery: '',
+      results: {
+        songs: [],
+        artists: [],
+        albums: []
+      }
+    };
+  },
+  methods: {
+    // Perform the search and fetch results from the API
+    async search() {
+      if (this.searchQuery.trim() === '') return;
+
+      try {
+        const response = await fetch(`/api/search?query=${this.searchQuery}`);
+        const data = await response.json();
+
+        // Updating the results based on the API response
+        this.results = {
+          songs: data.songs,
+          artists: data.artists,
+          albums: data.albums
+        };
+      } catch (error) {
+        console.error('Error searching:', error);
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* Neumorphism Effects */
+.bg-gray-700 {
+  box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2), -8px -8px 15px rgba(255, 255, 255, 0.1);
+}
+
+input {
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.1);
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* Custom scrollbar styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-teal-500 {
+  background-color: #38b2ac;
+}
+
+.scrollbar-track-gray-700 {
+  background-color: #2d3748;
+}
+</style> 
+
+Recommendations.vue:
+<template>
+  <div class="bg-gray-800 p-4 rounded-md shadow-md">
+    <h2 class="text-lg font-bold mb-2 text-red-500">Recommended For You</h2>
+    <ul class="space-y-4">
+      <li v-for="item in recommendations" :key="item.id" class="flex items-center justify-between">
+        <span>{{ item.title }} - {{ item.artist }}</span>
+        <button class="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600">
+          Play
+        </button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      recommendations: [],
+    };
+  },
+  created() {
+    this.fetchRecommendations();
+  },
+  methods: {
+    async fetchRecommendations() {
+      try {
+        const userId = 'user_1';  // Example user ID (replace with dynamic user ID)
+        const response = await this.$axios.get(`http://localhost:8000/recommend/user/${userId}`);
+        // Transform the response data into a format suitable for your UI
+        this.recommendations = Object.entries(response.data).map(([title, artist]) => ({
+          id: title,  // Use the track name as the ID
+          title,
+          artist,
+        }));
+      } catch (error) {
+        console.error("Error fetching recommendations:", error);
+      }
+    },
+  },
+};
+</script>
+Playlist.vue:
+
+<template>
+  <div class="bg-gradient-to-r from-blue-500 via-teal-500 to-green-500 p-6 rounded-3xl shadow-2xl w-full max-w-lg mx-auto">
+    <div class="bg-gray-800 p-6 rounded-xl shadow-2xl">
+      <h2 class="text-lg font-bold mb-4 text-red-500">Your Playlists</h2>
+      <ul class="space-y-2">
+        <li v-for="playlist in playlists" :key="playlist.playlist_name" class="flex justify-between bg-gray-700 p-4 rounded-xl shadow-xl">
+          <span class="text-white">{{ playlist.playlist_name }} ({{ playlist.songs.length }} songs)</span>
+          <button @click="viewPlaylist(playlist)" class="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600">View</button>
+        </li>
+      </ul>
+
+      <input
+        v-model="newPlaylistName"
+        placeholder="Create new playlist"
+        class="w-full p-3 mt-4 rounded-md bg-gray-700 text-white"
+        @keyup.enter="createPlaylist"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      playlists: [],
+      newPlaylistName: '',
+    };
+  },
+  methods: {
+    // Fetch the user's playlists
+    async fetchPlaylists() {
+      try {
+        const response = await fetch('/api/user/playlists'); // Replace with your actual endpoint
+        const data = await response.json();
+        this.playlists = data.playlists;
+      } catch (error) {
+        console.error('Error fetching playlists:', error);
+      }
+    },
+    // Create a new playlist
+    async createPlaylist() {
+      if (this.newPlaylistName.trim() === '') return;
+
+      try {
+        const response = await fetch('/api/user/create_playlist', {
+          method: 'POST',
+          body: JSON.stringify({ name: this.newPlaylistName }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+
+        // Add the new playlist to the list
+        this.playlists.push(data.playlist);
+        this.newPlaylistName = ''; // Reset input field
+      } catch (error) {
+        console.error('Error creating playlist:', error);
+      }
+    },
+    // View a specific playlist (fetch playlist details)
+    viewPlaylist(playlist) {
+      // You can navigate to another page or show playlist details
+      console.log('Viewing playlist:', playlist);
+    },
+  },
+  mounted() {
+    this.fetchPlaylists();
+  },
+};
+</script>
+
+<style scoped>
+/* Neumorphism Effects */
+.bg-gray-700 {
+  box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2), -8px -8px 15px rgba(255, 255, 255, 0.1);
+}
+
+input {
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.1);
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+</style>
+
+Visual3d.vue:
+<template>
+    <div ref="canvasContainer" class="w-full h-64"></div>
+  </template>
+  
+  <script>
+  import * as THREE from 'three';
+  
+  export default {
+    mounted() {
+      const container = this.$refs.canvasContainer;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
+  
+      const geometry = new THREE.BoxGeometry();
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const cube = new THREE.Mesh(geometry, material);
+      scene.add(cube);
+  
+
+Chat.vue:
+
+ <template>
+  <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-6 rounded-3xl shadow-2xl w-full max-w-lg mx-auto">
+    <div class="bg-gray-800 p-6 rounded-xl shadow-2xl">
+      <h2 class="text-xl font-bold mb-4 text-white text-center">Lyrical AI Chat</h2>
+      <div class="overflow-y-auto h-96 bg-gray-900 p-4 rounded-xl space-y-4 scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-gray-700">
+        <div v-for="message in messages" :key="message.id" class="flex items-start space-x-4">
+          <div v-if="message.sender === 'User'" class="bg-indigo-600 text-white p-3 rounded-xl shadow-xl max-w-xs self-end">
+            <p class="text-sm">{{ message.text }}</p>
+          </div>
+          <div v-if="message.sender === 'Lyrical AI'" class="bg-gray-700 text-white p-3 rounded-xl shadow-xl max-w-xs">
+            <p class="text-sm">{{ message.text }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center mt-4 space-x-2">
+        <input
+          v-model="userInput"
+          @keyup.enter="sendMessage"
+          placeholder="Ask me anything..."
+          class="w-full p-3 text-lg rounded-full bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        />
+        <button @click="sendMessage" class="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 focus:outline-none">
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      messages: [],
+      userInput: '',
+    };
+  },
+  methods: {
+    sendMessage() {
+      if (this.userInput.trim() === '') return;
+      this.messages.push({ sender: 'User', text: this.userInput });
+      this.getResponse(this.userInput);
+      this.userInput = '';
+    },
+    async getResponse(input) {
+      try {
+        const response = await fetch(`/api/chat/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query: input }),
+        });
+        const data = await response.json();
+        this.messages.push({ sender: 'Lyrical AI', text: data.reply });
+      } catch (error) {
+        console.error("Error fetching chat response:", error);
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* Neumorphism Effects */
+.bg-gray-800 {
+  box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2), -8px -8px 15px rgba(255, 255, 255, 0.1);
+}
+
+.bg-gray-900 {
+  box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.25), -8px -8px 15px rgba(255, 255, 255, 0.1);
+}
+
+input, button {
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.1);
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-indigo-500 {
+  background-color: #667eea;
+}
+
+.scrollbar-track-gray-700 {
+  background-color: #2d3748;
+}
+</style>
+
+
+Dev      camera.position.z = 5; 
+  
+      function animate() {
+        requestAnimationFrame(animate);
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        renderer.render(scene, camera);
+      }
+      animate();
+    },
+  };
+  </script>
+  
+Trending.vue:
+
+<template>
+  <div class="bg-gray-800 p-4 rounded-md shadow-md mt-4">
+    <h2 class="text-lg font-bold mb-2 text-red-500">Trending Songs</h2>
+    <ul class="space-y-4">
+      <li v-for="song in trendingSongs" :key="song.id" class="flex items-center justify-between">
+        <span>{{ song.name }} - {{ song.artist }}</span>
+        <button class="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600">
+          Play
+        </button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      trendingSongs: [],  // Empty array to hold the fetched trending songs
+    };
+  },
+  methods: {
+    async fetchTrendingSongs() {
+      try {
+        // Fetch trending songs from the backend API
+        const response = await fetch('/api/recommend/trending?top_n=10'); // Adjust `top_n` as needed
+        const data = await response.json();
+
+        // Map the response to format the data
+        this.trendingSongs = data.map((song, index) => ({
+          id: index + 1,  // Assign a unique id for each song
+          name: song.name,
+          artist: song.artist,
+        }));
+      } catch (error) {
+        console.error('Error fetching trending songs:', error);
+      }
+    },
+  },
+
+Devicespecific.vue:
+ <template>
+  <div class="bg-gray-800 p-4 rounded-md shadow-md mt-4">
+    <h2 class="text-lg font-bold mb-2 text-red-500">Device-Specific APIs</h2>
+    <ul class="space-y-2">
+      <li v-for="api in deviceApis" :key="api.name">
+        <span>{{ api.name }}</span>
+        <button class="ml-4 bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600">
+          Learn More
+        </button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      deviceApis: [],
+    };
+  },
+  created() {
+    this.fetchDeviceApis();
+  },
+  methods: {
+    async fetchDeviceApis() {
+      try {
+        const response = await this.$axios.get('http://localhost:8000/device-apis');
+        this.deviceApis = response.data;
+      } catch (error) {
+        console.error("Error fetching device APIs:", error);
+      }
+    },
+  },
+};
+</script>
+  mounted() {
+    // Call the method to fetch the trending songs when the component is mounted
+    this.fetchTrendingSongs();
+  },
+};
+</script>
+
+<style scoped>
+/* Styling for Neumorphism effect */
+.bg-gray-800 {
+  box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2), -8px -8px 15px rgba(255, 255, 255, 0.1);
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+</style>
+
+
+
+make the application like that of a world standard application.
+
+
+also. from the start which is Iconbar.vue, give me each of them one by one. after which you ask me if it is okay, then we move to the next. I want a robust and complex application

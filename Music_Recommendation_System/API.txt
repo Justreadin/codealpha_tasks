@@ -1,0 +1,113 @@
+i have a task to named music recommendation system:
+Spotify's recommendation system powered by machine learning predicts a user's likelihood of repeatedly listenning to a song within a set timeframe. Using a dataset with 1 indicating repeated plays within a month, it tracks user song histories and timestamps to generate personalized song recommendation.
+
+i need to do this project and i want it to be robust, give me the requirements and the steps before we begin each step
+
+2. Database Connection Setup
+Location: scripts/db_connection.py
+
+Purpose: Establish database connections for loading data and querying recommendations.
+
+Example Code:
+
+python
+Copy code
+from sqlalchemy import create_engine
+
+DATABASE_URL = "postgresql://username:password@localhost:5432/music_recommendation"
+engine = create_engine(DATABASE_URL)
+
+def get_db_engine():
+    return engine
+3. Data Preprocessing
+Location: scripts/data_preprocessing.py
+
+Purpose: Clean and prepare the data for model training.
+
+Example Code:
+
+python
+Copy code
+import pandas as pd
+
+def clean_data(data_path):
+    data = pd.read_json(data_path)
+    # Drop duplicates, handle missing values
+    data = data.dropna(subset=['track_name', 'artist_name'])
+    data['played_at'] = pd.to_datetime(data['played_at'])
+    return data
+
+cleaned_data = clean_data("../data/spotify_million_playlist.json")
+cleaned_data.to_csv("../data/cleaned_data.csv", index=False)
+4. Model Training
+Location: scripts/train_model.py
+
+Purpose: Train machine learning models.
+
+Example Code:
+
+python
+Copy code
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingClassifier
+
+def train_model(data_path):
+    data = pd.read_csv(data_path)
+    X = data[['duration_ms', 'play_count']]
+    y = data['repeat_play']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    model = GradientBoostingClassifier()
+    model.fit(X_train, y_train)
+
+    return model
+
+model = train_model("../data/cleaned_data.csv")
+5. Saving Models
+Location: models/
+
+Save Model:
+
+python
+Copy code
+import joblib
+
+joblib.dump(model, "../models/music_recommendation_model.pkl")
+6. API Code for Serving Recommendations
+Location: api/recommendation_api.py
+
+Purpose: Provide RESTful API endpoints using FastAPI.
+
+Example Code:
+
+python
+Copy code
+from fastapi import FastAPI
+import joblib
+
+app = FastAPI()
+model = joblib.load("../models/music_recommendation_model.pkl")
+
+@app.get("/recommend/{user_id}")
+def recommend(user_id: int):
+    # Mocked recommendation for simplicity
+    return {"user_id": user_id, "recommended_tracks": ["Track A", "Track B"]}
+7. Main Application
+Location: main.py
+
+Purpose: Run the entire application, including API, database setup, and data pipeline.
+
+Example Code:
+
+python
+Copy code
+import uvicorn
+
+if __name__ == "__main__":
+    uvicorn.run("api.recommendation_api:app", host="0.0.0.0", port=1200, reload=True)
+Next Steps
+Data Preparation: Load and preprocess the dataset.
+Model Development: Train and evaluate models.
+API Integration: Deploy the API.
+Testing: Validate data flow and recommendation accuracy.
+Deployment: Serve recommendations through API endpoints.
