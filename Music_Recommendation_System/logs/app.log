@@ -1,1 +1,10 @@
 2025-02-07 10:16:16,745 - music_recommendation_system - WARNING - Received incomplete log data from frontend.
+2025-02-07 10:28:19,847 - music_recommendation_system - WARNING - Received incomplete log data from frontend.
+2025-02-07 10:28:20,868 - music_recommendation_system - ERROR - Frontend error: Error fetching trending songs - Error: TypeError: data.map is not a function - Stack Trace: No stack trace provided
+2025-02-07 10:28:53,266 - music_recommendation_system - ERROR - Frontend error: Error fetching chat response - Error: Error: Network response was not ok - Stack Trace: No stack trace provided
+2025-02-07 10:54:05,285 - music_recommendation_system - WARNING - Received incomplete log data from frontend.
+2025-02-07 10:54:05,699 - music_recommendation_system - ERROR - Frontend error: Error fetching trending songs - Error: TypeError: data.map is not a function - Stack Trace: No stack trace provided
+2025-02-07 10:55:37,498 - music_recommendation_system - WARNING - Received incomplete log data from frontend.
+2025-02-07 10:55:37,585 - music_recommendation_system - ERROR - Frontend error: Error fetching trending songs - Error: TypeError: data.map is not a function - Stack Trace: No stack trace provided
+2025-02-07 11:01:12,529 - music_recommendation_system - WARNING - Received incomplete log data from frontend.
+2025-02-07 11:01:12,732 - music_recommendation_system - ERROR - Frontend error: Error fetching trending songs - Error: TypeError: data.map is not a function - Stack Trace: No stack trace provided

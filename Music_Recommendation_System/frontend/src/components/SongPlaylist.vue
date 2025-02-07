@@ -85,21 +85,31 @@ export default {
       isLoading: true,
       error: false,
       errorMessage: "",
+      userId: localStorage.getItem("user_id") || null, // Retrieve user_id
     };
   },
   methods: {
     async fetchPlaylists() {
+      if (!this.userId) {
+        this.error = true;
+        this.errorMessage = "User ID not found. Please log in.";
+        logger.error("User ID is missing from localStorage.");
+        return;
+      }
+
       this.isLoading = true;
       this.error = false;
 
       try {
-        const response = await axios.get("http://localhost:8000/user/playlists");
-        this.playlists = response.data.playlists;
-        logger.info("Playlists fetched successfully"); // Log successful fetch
+        const response = await axios.get(
+          `http://localhost:8000/user/${this.userId}/generate_playlist/`,
+        );
+        this.playlists = response.data.playlist;
+        logger.info("Playlists fetched successfully", this.playlists);
       } catch (error) {
         this.error = true;
         this.errorMessage = "Error fetching playlists. Please try again later.";
-        logger.error("Error fetching playlists:", error); // Log the error
+        logger.error("Error fetching playlists:", error);
       } finally {
         this.isLoading = false;
       }
@@ -107,22 +117,29 @@ export default {
 
     async createPlaylist() {
       if (!this.newPlaylistName.trim()) return;
+      if (!this.userId) {
+        logger.error("User ID is missing. Cannot create playlist.");
+        return;
+      }
 
       try {
-        const response = await axios.post("http://localhost:8000/user/create_playlist", {
-          name: this.newPlaylistName,
-        });
+        const response = await axios.post(
+          `http://localhost:8000/user/${this.userId}/create_playlist/`,
+          {
+            song_names: [this.newPlaylistName], // Send song names list
+          },
+        );
 
         this.playlists.push(response.data.playlist);
+        logger.info(`Playlist '${this.newPlaylistName}' created successfully`);
         this.newPlaylistName = "";
-        logger.info(`Playlist '${this.newPlaylistName}' created successfully`); // Log playlist creation
       } catch (error) {
-        logger.error("Error creating playlist:", error); // Log creation error
+        logger.error("Error creating playlist:", error);
       }
     },
 
     viewPlaylist(playlist) {
-      logger.info("Viewing playlist:", playlist); // Log playlist view
+      logger.info("Viewing playlist:", playlist);
     },
 
     setup3DArt() {

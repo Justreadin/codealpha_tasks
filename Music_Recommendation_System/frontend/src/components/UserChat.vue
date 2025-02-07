@@ -65,20 +65,20 @@
     </div>
   </div>
 </template>
-
 <script>
-import logger from "@/utils/logger.js"
+import logger from "@/utils/logger.js";
+
 export default {
   data() {
     return {
       messages: [],
       userInput: "",
-      platform: "", // Use platform instead of userId
+      user_id: "", // Now using user_id instead of platform
     };
   },
   created() {
-    // Retrieve platform from localStorage when the component is created
-    this.platform = localStorage.getItem("platform") || "Unknown Device";
+    // Retrieve user_id from localStorage when the component is created
+    this.user_id = localStorage.getItem("user_id") || "Unknown Device";
   },
   methods: {
     sendMessage() {
@@ -91,14 +91,14 @@ export default {
     },
     async getResponse(input) {
       try {
-        const response = await fetch(`http://localhost:8000/chat/`, {
+        const response = await fetch("http://localhost:8000/chat/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             query: input,
-            platform: this.platform, // Use the retrieved platform
+            user_id: this.user_id, // Using user_id now
             top_n: 5,
           }),
         });
@@ -137,6 +137,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 /* Responsive & Neumorphic Design Enhancements */
 ::v-deep(.bg-gray-800) {

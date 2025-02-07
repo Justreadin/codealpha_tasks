@@ -43,7 +43,7 @@ import logger from "@/utils/logger";
 export default {
   data() {
     return {
-      platform: "", // Detected platform/device type
+      user_id: "", // Detected platform/device type as user_id
       isLoading: true, // Loading state
       error: false, // Error state
     };
@@ -55,23 +55,23 @@ export default {
     async detectDevice() {
       try {
         const userAgent = navigator.userAgent.toLowerCase();
-        let platform = "Unknown Device";
+        let user_id = "Unknown Device";
 
         if (/mobile/i.test(userAgent)) {
-          platform = "Mobile";
+          user_id = "Mobile";
         } else if (/tablet/i.test(userAgent)) {
-          platform = "Tablet";
+          user_id = "Tablet";
         } else {
-          platform = "Desktop";
+          user_id = "Desktop";
         }
 
-        // Save platform in local storage for use by other components
-        localStorage.setItem("platform", platform);
-        this.platform = platform;
+        // Save user_id in local storage for use by other components
+        localStorage.setItem("user_id", user_id);
+        this.user_id = user_id;
 
         // Register the device with the backend API
-        logger.info(`Detected device: ${platform}`);
-        await this.registerUser(platform);
+        logger.info(`Detected device: ${user_id}`);
+        await this.registerUser(user_id);
       } catch (error) {
         logger.error(`Error detecting device or registering user: ${error}`);
         this.error = true;
@@ -80,15 +80,16 @@ export default {
       }
     },
 
-    async registerUser(platform) {
+    async registerUser(user_id) {
       try {
         const response = await axios.post(
           "http://localhost:8000/user/register",
           {
-            phone_model: platform,
+            phone_model: user_id, // Use user_id instead of platform
             name: "Guest User",
           },
         );
+
         logger.info(`User registered successfully: ${response.data.message}`);
       } catch (error) {
         logger.error(
@@ -100,6 +101,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 /* Styling for neumorphism effect */
 ::v-deep(.bg-gray-800) {

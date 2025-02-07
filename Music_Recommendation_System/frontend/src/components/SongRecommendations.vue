@@ -89,11 +89,11 @@ export default {
       recommendations: { personalizedAndSpotify: [] }, // Combined personalized + Spotify recommendations
       newReleases: [], // New releases fetched from the API
       similarSongs: [], // Similar songs fetched from the API
-      platform: null, // Platform to fetch recommendations for
+      user_id: null, // User ID to fetch recommendations for
     };
   },
   created() {
-    this.platform = localStorage.getItem("platform"); // Retrieve platform from localStorage
+    this.user_id = localStorage.getItem("user_id"); // Retrieve user_id from localStorage
     this.fetchRecommendations();
     this.fetchNewReleases();
     this.fetchSimilarSongs();
@@ -102,13 +102,13 @@ export default {
     // Fetch personalized + Spotify recommendations from the API
     async fetchRecommendations() {
       try {
-        if (!this.platform) {
-          logger.error("Platform not found in localStorage.");
+        if (!this.user_id) {
+          logger.error("User ID not found in localStorage.");
           return;
         }
 
         const response = await this.$axios.get(
-          `http://localhost:8000/recommend/combined/${this.platform}`,
+          `http://localhost:8000/recommend/combined/${this.user_id}`,
         );
 
         const recommendations = this.transformRecommendations(response.data);
@@ -126,7 +126,7 @@ export default {
     async fetchNewReleases() {
       try {
         const response = await this.$axios.get(
-          `http://localhost:8000/recommend/new_releases/`,
+          "http://localhost:8000/recommend/new_releases/",
         );
 
         this.newReleases = response.data.recommendations.map((item, index) => ({

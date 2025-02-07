@@ -178,7 +178,7 @@ async def add_platform_data(data: PlatformData):
         raise HTTPException(status_code=500, detail=f"Error adding platform data: {e}")
 
 # Endpoint: Fetch Spotify data for a platform
-@app.get("/platform/{platform_id}/spotify_data")
+@app.get("/platform/{user_id}/spotify_data")
 async def fetch_spotify_data(platform_id: str):
     try:
         user_top_tracks = sp.current_user_top_tracks(limit=10)
