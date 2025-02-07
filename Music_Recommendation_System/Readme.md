@@ -1,66 +1,54 @@
-# Music Recommendation System
+# Lyrical - AI Music Recommendation System
 
 ## Overview
-Spotify's recommendation system, powered by machine learning, predicts a user's likelihood of repeatedly listening to a song within a set timeframe. Using a dataset with 1 indicating repeated plays within a month, it tracks user song histories and timestamps to generate personalized song recommendations.
+Lyrical is an AI-powered music recommendation system that integrates advanced machine learning with full-stack development. Designed to deliver personalized music experiences, Lyrical provides song recommendations, trending music insights, playlist management, and an interactive chat feature. It is powered by **Spotify's dataset**, tracking user listening behavior to predict song preferences.
 
-## Features
-- **Personalized Recommendations**: Predicts songs users are likely to replay.
-- **Machine Learning Model**: Uses Gradient Boosting for classification.
-- **FastAPI Backend**: Exposes recommendations via API.
-- **Vue.js Frontend**: A visually impressive UI with 3D visuals, animations, and a stunning design.
-- **Database Integration**: Uses PostgreSQL for storing user history.
-- **Chat System**: Integrated floating chat for user interaction.
+## Key Features
+✅ **Personalized Recommendations** – AI-driven music suggestions based on user listening history.
+✅ **Multi-Device Optimization** – Recommends music based on the user's device type.
+✅ **Trending Music** – Displays trending songs dynamically.
+✅ **Smart Search** – Find music with an intelligent search engine.
+✅ **Playlist Management** – Users can create and manage their playlists.
+✅ **Interactive Chat System** – Engage with an AI-powered chat assistant for music discovery.
+✅ **Real-Time API Responses** – FastAPI backend ensures smooth interaction.
+✅ **Visually Stunning UI** – Vue.js frontend with 3D animations and modern aesthetics.
+
+## Tech Stack
+- **Frontend:** Vue.js, TailwindCSS, Three.js (for 3D visuals)
+- **Backend:** FastAPI, PostgreSQL, SQLAlchemy
+- **Machine Learning:** Scikit-learn (Gradient Boosting Classifier)
+- **Database:** PostgreSQL
+- **Deployment:** Docker, Uvicorn, Nginx
 
 ---
-## Project Structure
 
-### Backend
+## Project Structure
 ```
-Music_Recommendation_System/
+Lyrical/
 │
 ├── data/                # Datasets
-├── models/              # Saved ML models
+├── models/              # Trained ML models
 ├── notebooks/           # Jupyter notebooks for experimentation
 ├── api/                 # FastAPI-based API
+│   ├── recommendation_api.py  # API for music recommendations
 ├── scripts/             # Helper scripts
 │   ├── db_connection.py   # Database connection setup
 │   ├── data_preprocessing.py # Data cleaning and processing
 │   ├── train_model.py    # Model training script
 ├── main.py              # Application entry point
-```
-
-### Frontend
-```
-src/
-├── assets/                # Static assets
-├── components/            # Vue components
-│   ├── Chat.vue           # Chat system component
-│   ├── Header.vue         # Search bar
-│   ├── IconBar.vue        # Navigation bar
-│   ├── Recommendations.vue # Recommended songs
-│   ├── DeviceSpecific.vue # Device-specific API recommendations
-│   ├── Visual3D.vue       # 3D visualization using Three.js
-│   ├── Playlist.vue       # Playlist creation and management
-│   ├── Trending.vue       # Trending songs display
-│   ├── SearchBar.vue      # Search input
-├── views/                 # Application views
-│   ├── HomeView.vue       # Main home page
-│   ├── RecommendationsView.vue # Recommendations page
-│   ├── PlaylistView.vue   # Playlists management
-│   ├── SearchView.vue     # Search results page
-├── store/                 # Vuex/Pinia state management
-│   ├── index.js           # Global state
-│   ├── modules/
-│       ├── user.js        # User state
-│       ├── recommendations.js # Recommendation state
-│       ├── playlists.js   # Playlist state
-├── App.vue                # Main Vue component
-├── main.js                # Entry point
-public/
-└── index.html             # Main HTML file
+│
+├── frontend/            # Vue.js frontend
+│   ├── components/      # UI components
+│   ├── views/           # Pages and views
+│   ├── store/           # Vuex state management
+│   ├── App.vue          # Main Vue component
+│   ├── main.js          # Entry point
+│
+└── docker/              # Deployment configuration
 ```
 
 ---
+
 ## Installation and Setup
 
 ### Prerequisites
@@ -72,8 +60,8 @@ public/
 ### Backend Setup
 ```sh
 # Clone the repository
-git clone https://github.com/Justreadin/codealpha_task/Music_Recommendation_System.git
-cd Music_Recommendation_System
+git clone https://github.com/Justreadin/codealpha_task/Lyrical.git
+cd Lyrical
 
 # Create a virtual environment
 python -m venv venv
@@ -81,6 +69,12 @@ source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Set up the database
+python scripts/db_connection.py
+
+# Train the model (optional if pre-trained model is available)
+python scripts/train_model.py
 
 # Run FastAPI
 uvicorn api.recommendation_api:app --host 0.0.0.0 --port 1200 --reload
@@ -94,8 +88,8 @@ npm run dev
 ```
 
 ---
-## API Endpoints
 
+## API Endpoints
 ### Get Recommendations
 **Endpoint:** `/recommend/{user_id}`
 
@@ -104,25 +98,63 @@ npm run dev
 **Response:**
 ```json
 {
-  "user_id": Windows 10,
+  "user_id": "Windows 10",
   "recommended_tracks": ["Song A", "Song B"]
 }
 ```
 
 ---
+
+## Model Training Workflow
+
+1. **Database Connection Setup**
+   - Location: `scripts/db_connection.py`
+   - Establishes a connection to PostgreSQL.
+
+2. **Data Preprocessing**
+   - Location: `scripts/data_preprocessing.py`
+   - Cleans and prepares the dataset.
+
+3. **Model Training**
+   - Location: `scripts/train_model.py`
+   - Trains a **Gradient Boosting Classifier** on user listening behavior.
+
+4. **Saving the Model**
+   - Location: `models/`
+   - Saves the trained model using `joblib`.
+
+5. **Serving the Model**
+   - Location: `api/api.py`
+   - Provides RESTful API endpoints for recommendations.
+
+6. **Frontend Integration**
+   - Location: `frontend/`
+   - Builds the Vue.js application with search, playlists, and chat features.
+
+---
+
 ## Next Steps
-1. **Data Preparation**: Load and preprocess the dataset.
-2. **Model Development**: Train and evaluate machine learning models.
-3. **API Integration**: Deploy the API for recommendations.
-4. **Frontend Enhancement**: Improve UI/UX with animations and 3D visuals.
-5. **Testing**: Validate data flow and recommendation accuracy.
-6. **Deployment**: Deploy both frontend and backend services.
+1. **Fine-tune the Machine Learning Model** – Improve accuracy with additional features.
+2. **Optimize API Performance** – Reduce latency and increase scalability.
+3. **Enhance UI/UX** – Add more animations and make interactions seamless.
+4. **Deploy on Cloud** – Host on AWS/GCP/Azure with Dockerized containers.
+5. **Implement User Authentication** – Allow users to save preferences.
 
 ---
+
 ## Contributions
-Feel free to contribute to this project by submitting issues or pull requests.
+We welcome contributions from the community! To contribute:
+1. Fork the repository.
+2. Create a new branch (`feature-new-feature`).
+3. Commit your changes.
+4. Open a pull request.
 
 ---
-## Acknowlegdement:
-CodeAlpha
+
+## Acknowledgments
+Special thanks to **CodeAlpha** for this incredible opportunity!
+
+---
+
+### 🚀 Let’s make music discovery smarter with Lyrical! 🎶
 

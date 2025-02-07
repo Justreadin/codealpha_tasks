@@ -83,7 +83,7 @@ export default {
     async registerUser(platform) {
       try {
         const response = await axios.post(
-          "https://localhost:8000/user/register",
+          "http://localhost:8000/user/register",
           {
             phone_model: platform,
             name: "Guest User",

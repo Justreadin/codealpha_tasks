@@ -71,7 +71,7 @@ export default {
 
       try {
         const response = await fetch(
-          "https://localhost:8000/recommend/trending?top_n=10",
+          "http://localhost:8000/recommend/trending?top_n=10",
         ); // Fetch trending songs from backend
         const data = await response.json();
 
@@ -103,7 +103,7 @@ export default {
     logError(message, error) {
       // Log error details to backend (where Winston is set up)
       this.$axios
-        .post("https://localhost:8000/log/error", {
+        .post("http://localhost:8000/log/error", {
           message: message,
           error: error.toString(),
           timestamp: new Date().toISOString(),

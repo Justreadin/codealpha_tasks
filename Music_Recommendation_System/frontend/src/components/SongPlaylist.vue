@@ -93,7 +93,7 @@ export default {
       this.error = false;
 
       try {
-        const response = await axios.get("/user/playlists");
+        const response = await axios.get("http://localhost:8000/user/playlists");
         this.playlists = response.data.playlists;
         logger.info("Playlists fetched successfully"); // Log successful fetch
       } catch (error) {
@@ -109,7 +109,7 @@ export default {
       if (!this.newPlaylistName.trim()) return;
 
       try {
-        const response = await axios.post("/user/create_playlist", {
+        const response = await axios.post("http://localhost:8000/user/create_playlist", {
           name: this.newPlaylistName,
         });
 

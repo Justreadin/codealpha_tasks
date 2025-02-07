@@ -86,7 +86,7 @@ const routes = [
     component: ChatView,
     beforeEnter: async (to, from, next) => {
       try {
-        const response = await axios.get("http://localhost:8000/chat"); // Updated URL
+        const response = await axios.get("http://localhost:8000/chat/"); // Updated URL
         to.meta.apiData = response.data;
         next();
       } catch (error) {
