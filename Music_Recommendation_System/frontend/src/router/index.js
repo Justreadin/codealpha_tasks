@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import axios from "axios";
+import logger from "@/utils/logger"; // Ensure you have a logger utility in your project
 
 // Importing Views
 import HomeView from "../views/HomeView.vue";
@@ -20,7 +21,6 @@ const routes = [
         next();
       } catch (error) {
         const errorMessage = "Error fetching home data";
-        this.$logger.error(errorMessage, error);
         logError(errorMessage, error); // Log error to backend
         next(); // Continue to the route even if the API call fails
       }
@@ -40,7 +40,6 @@ const routes = [
         next();
       } catch (error) {
         const errorMessage = `Error fetching recommendations data for user: ${to.params.user_id}`;
-        this.$logger.error(errorMessage, error);
         logError(errorMessage, error); // Log error to backend
         next();
       }
@@ -60,7 +59,6 @@ const routes = [
         next();
       } catch (error) {
         const errorMessage = `Error fetching playlists data for user: ${to.params.user_id}`;
-        this.$logger.error(errorMessage, error);
         logError(errorMessage, error); // Log error to backend
         next();
       }
@@ -77,7 +75,6 @@ const routes = [
         next();
       } catch (error) {
         const errorMessage = "Error fetching search data";
-        this.$logger.error(errorMessage, error);
         logError(errorMessage, error); // Log error to backend
         next();
       }
@@ -94,7 +91,6 @@ const routes = [
         next();
       } catch (error) {
         const errorMessage = "Error fetching chat data";
-        this.$logger.error(errorMessage, error);
         logError(errorMessage, error); // Log error to backend
         next();
       }
@@ -113,13 +109,13 @@ export default router;
 function logError(message, error) {
   // Log error details to backend (where Winston is set up)
   axios
-    .post("http://localhost:8000/log/error", {
+    .post("http://localhost:0/log/error", {
       message: message,
       error: error.message || "No additional error info",
       stack: error.stack || "No stack trace",
       timestamp: new Date().toISOString(),
     })
     .catch((err) => {
-      this.$logger.error("Failed to log error:", err);
+      logger.error("Failed to log error:", err); // Updated to use logger.error
     });
 }

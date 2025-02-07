@@ -54,6 +54,8 @@
 </template>
 
 <script>
+import logger from "@/utils/logger.js";
+
 export default {
   data() {
     return {
@@ -107,7 +109,7 @@ export default {
           timestamp: new Date().toISOString(),
         })
         .catch((err) => {
-          this.$logger.error("Failed to log error:", err);
+          logger.error("Failed to log error:", err);
         });
     },
   },
@@ -117,35 +119,34 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 /* Styling for neumorphism effect */
-.bg-gray-800 {
+::v-deep(.bg-gray-800) {
   box-shadow:
     8px 8px 15px rgba(0, 0, 0, 0.2),
     -8px -8px 15px rgba(255, 255, 255, 0.1);
 }
 
-button:hover {
+::v-deep(button:hover) {
   transform: scale(1.05);
 }
 
-button:active {
+::v-deep(button:active) {
   transform: scale(0.98);
 }
 
-ul li {
+::v-deep(ul li) {
   transition: all 0.3s ease;
 }
 
-ul li:hover {
+::v-deep(ul li:hover) {
   box-shadow:
     0 4px 6px rgba(0, 0, 0, 0.3),
     0 2px 4px rgba(255, 255, 255, 0.1);
 }
 
 /* Styling for loading spinner */
-svg {
+::v-deep(svg) {
   animation: spin 1s linear infinite;
 }
 

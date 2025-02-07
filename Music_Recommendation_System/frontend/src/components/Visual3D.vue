@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
   <div ref="canvasContainer" class="w-full h-96 bg-black"></div>
 </template>
@@ -5,6 +6,7 @@
 <script>
 import * as THREE from "three";
 import mitt from "mitt";
+import logger from "@/utils/logger"; // Ensure you have a logger utility in your project
 
 const emitter = mitt();
 
@@ -14,7 +16,6 @@ export default {
 
     if (!container.clientWidth || !container.clientHeight) {
       const errorMessage = "Canvas container has zero dimensions.";
-      this.$logger.error(errorMessage);
       this.logError(errorMessage); // Log error to backend
       return;
     }
@@ -91,7 +92,6 @@ export default {
         renderer.setSize(width, height);
       } else {
         const errorMessage = "Invalid canvas dimensions during resize event.";
-        this.$logger.error(errorMessage);
         this.logError(errorMessage); // Log error to backend
       }
     };
@@ -140,7 +140,7 @@ export default {
           timestamp: new Date().toISOString(),
         })
         .catch((err) => {
-          this.$logger.error("Failed to log error:", err);
+          logger.error("Failed to log error:", err);
         });
     },
   },
@@ -149,7 +149,7 @@ export default {
 
 <style scoped>
 /* Canvas container with black background to enhance the visual 3D effect */
-div[ref="canvasContainer"] {
+::v-deep(div[ref="canvasContainer"]) {
   background: black;
   border-radius: 10px;
   overflow: hidden;

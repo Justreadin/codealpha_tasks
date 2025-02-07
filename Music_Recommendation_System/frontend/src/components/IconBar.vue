@@ -67,9 +67,9 @@ export default {
   },
 };
 </script>
-
 <style scoped>
-.icon-button {
+/* Styling for icon buttons */
+::v-deep(.icon-button) {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,18 +82,18 @@ export default {
     color 0.2s ease-in-out;
 }
 
-.icon-button i {
+::v-deep(.icon-button i) {
   font-size: 1.5rem;
   margin-bottom: 4px;
 }
 
-.icon-button:hover {
+::v-deep(.icon-button:hover) {
   color: #4fd1c5; /* Teal hover effect */
   transform: translateY(-4px);
 }
 
 /* Floating chat button hover animation */
-button:hover {
+::v-deep(button:hover) {
   transform: scale(1.1);
   transition: transform 0.3s ease-in-out;
 }

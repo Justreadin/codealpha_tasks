@@ -77,7 +77,6 @@ import axios from "axios";
 import * as THREE from "three";
 import logger from "@/utils/logger";
 
-
 export default {
   data() {
     return {
@@ -176,31 +175,30 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 /* Enhanced container with rounded corners and 3D effects */
-.bg-gray-700 {
+::v-deep(.bg-gray-700) {
   box-shadow:
     8px 8px 15px rgba(0, 0, 0, 0.3),
     -8px -8px 15px rgba(255, 255, 255, 0.2);
 }
 
 /* Input field with smooth transitions */
-input {
+::v-deep(input) {
   transition: all 0.3s ease;
 }
 
-input:focus {
+::v-deep(input:focus) {
   transform: scale(1.05);
 }
 
 /* Button hover effect */
-button:hover {
+::v-deep(button:hover) {
   transform: scale(1.05);
 }
 
 /* Loading spinner animation */
-svg {
+::v-deep(svg) {
   animation: spin 1s linear infinite;
 }
 
@@ -214,7 +212,7 @@ svg {
 }
 
 /* Container hover 3D effect */
-.transform:hover {
+::v-deep(.transform:hover) {
   transform: scale(1.05) rotate(5deg);
 }
 </style>

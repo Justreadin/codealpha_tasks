@@ -1,11 +1,17 @@
 import logging
+import os
+
+# Ensure the logs directory exists
+log_dir = "logs"
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
 
 # Configure the logger
 logger = logging.getLogger("music_recommendation_system")
 logger.setLevel(logging.DEBUG)
 
 # Create file handler to log in a file
-file_handler = logging.FileHandler("logs/app.log")
+file_handler = logging.FileHandler(os.path.join(log_dir, "app.log"))
 file_handler.setLevel(logging.DEBUG)
 
 # Create a console handler for real-time logs
@@ -22,5 +28,3 @@ console_handler.setFormatter(formatter)
 # Add handlers to the logger
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
-
-# Export the logger for use in other parts of the app

@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { logger } from "./logger"; // Import the logger
+import logger from "@/utils/logger";
 
 export default {
   data() {
@@ -191,35 +191,34 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 /* Container hover effect with smooth transition */
-.bg-gray-800 {
+::v-deep(.bg-gray-800) {
   box-shadow:
     8px 8px 15px rgba(0, 0, 0, 0.3),
     -8px -8px 15px rgba(255, 255, 255, 0.2);
 }
 
 /* Add smooth hover and transition effects */
-button:hover {
+::v-deep(button:hover) {
   transform: scale(1.05);
 }
 
-ul {
+::v-deep(ul) {
   transition: all 0.3s ease;
 }
 
-ul li:hover {
+::v-deep(ul li:hover) {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Animate play button */
-button {
+::v-deep(button) {
   transition: all 0.3s ease;
 }
 
-button:hover {
+::v-deep(button:hover) {
   background-color: #fbbf24;
   transform: scale(1.05);
 }

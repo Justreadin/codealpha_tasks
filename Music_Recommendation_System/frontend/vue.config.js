@@ -1,14 +1,11 @@
-// vue.config.js
+const { defineConfig } = require("@vue/cli-service");
 const path = require("path");
+const webpack = require("webpack");
 
-module.exports = {
-  // Change the base URL for the app
-  publicPath: process.env.NODE_ENV === "production" ? "/my-app/" : "/",
-
-  // Specify where the built files will be output
+module.exports = defineConfig({
+  publicPath: "/",
   outputDir: "dist",
 
-  // Enable or configure a development server proxy for API calls
   devServer: {
     proxy: {
       "/api": {
@@ -18,27 +15,46 @@ module.exports = {
     },
   },
 
-  // Configure assets directory
   assetsDir: "assets",
 
-  // Configure alias for easier imports
   configureWebpack: {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),
+        fecha: path.resolve(__dirname, "node_modules/fecha"),
       },
       fallback: {
         util: require.resolve("util/"),
         os: require.resolve("os-browserify/browser"),
         events: require.resolve("events/"),
-        fs: false, // Avoid including file system in the browser
+        fs: false, // ✅ Ensure fs is not included
         path: require.resolve("path-browserify"),
         zlib: require.resolve("browserify-zlib"),
         http: require.resolve("stream-http"),
         https: require.resolve("https-browserify"),
+        assert: require.resolve("assert/"),
+        stream: require.resolve("stream-browserify"),
+        url: require.resolve("url/"),
+        process: require.resolve("process/browser"), // ✅ Fix for "process is not defined"
       },
+      modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        process: "process/browser", // ✅ Ensures `process` is available globally
+      }),
+    ],
+    externals: {
+      fs: "commonjs2 fs", // ✅ Explicitly exclude `fs` module
     },
   },
 
+  chainWebpack: (config) => {
+    config.plugin("define").tap((args) => {
+      args[0]["process.env"] = JSON.stringify(process.env || {});
+      return args;
+    });
+  },
+
   transpileDependencies: true,
-};
+});

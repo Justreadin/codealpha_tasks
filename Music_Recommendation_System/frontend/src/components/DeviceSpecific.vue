@@ -100,16 +100,16 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 /* Styling for neumorphism effect */
-.bg-gray-800 {
+::v-deep(.bg-gray-800) {
   box-shadow:
     8px 8px 15px rgba(0, 0, 0, 0.2),
     -8px -8px 15px rgba(255, 255, 255, 0.1);
 }
 
-svg {
+/* Spinning animation for SVG elements */
+::v-deep(svg) {
   animation: spin 1s linear infinite;
 }
 

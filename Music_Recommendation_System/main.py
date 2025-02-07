@@ -24,7 +24,7 @@ app.add_middleware(
 )
 
 # Serve static files from the Vue.js `dist` folder
-app.mount("/static", StaticFiles(directory="frontend/dist/static"), name="static")
+app.mount("/assets", StaticFiles(directory="frontend/dist/assets"), name="assets")
 
 @app.get("/")
 async def serve_vue_app():

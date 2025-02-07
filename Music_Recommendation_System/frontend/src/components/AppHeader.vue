@@ -134,10 +134,9 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 /* Shared styles for navigation buttons */
-.icon-button {
+::v-deep(.icon-button) {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -150,25 +149,27 @@ export default {
     color 0.2s ease-in-out;
 }
 
-.icon-button i {
+::v-deep(.icon-button i) {
   font-size: 1.5rem;
   margin-bottom: 4px;
 }
 
-.icon-button:hover {
+::v-deep(.icon-button:hover) {
   color: #4fd1c5; /* Teal hover effect */
   transform: translateY(-4px);
 }
 
 /* Mobile sidebar transition */
-.slide-enter-active,
-.slide-leave-active {
+::v-deep(.slide-enter-active),
+::v-deep(.slide-leave-active) {
   transition: transform 0.3s ease;
 }
-.slide-enter-from {
+
+::v-deep(.slide-enter-from) {
   transform: translateX(-100%);
 }
-.slide-leave-to {
+
+::v-deep(.slide-leave-to) {
   transform: translateX(-100%);
 }
 </style>

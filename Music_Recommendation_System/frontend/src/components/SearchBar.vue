@@ -169,19 +169,18 @@ export default {
   },
 };
 </script>
-
 <style scoped>
-.search-section {
+::v-deep(.search-section) {
   max-width: 800px;
   margin: 0 auto;
   position: relative;
 }
 
-.search-section input:focus {
+::v-deep(.search-section input:focus) {
   border-color: #ff6347; /* Highlight input field */
 }
 
-ul {
+::v-deep(ul) {
   position: absolute;
   z-index: 10;
   width: 100%;
@@ -190,15 +189,15 @@ ul {
   color: white;
 }
 
-ul li:hover {
+::v-deep(ul li:hover) {
   background: #ff6347;
 }
 
-.search-section h2 {
+::v-deep(.search-section h2) {
   color: #ff6347;
 }
 
-#search-canvas {
+::v-deep(#search-canvas) {
   position: absolute;
   top: 0;
   left: 0;

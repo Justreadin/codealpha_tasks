@@ -72,8 +72,8 @@ public/
 ### Backend Setup
 ```sh
 # Clone the repository
-git clone https://github.com/codealpha_task/music-recommendation.git
-cd music-recommendation
+git clone https://github.com/Justreadin/codealpha_task/Music_Recommendation_System.git
+cd Music_Recommendation_System
 
 # Create a virtual environment
 python -m venv venv
@@ -104,7 +104,7 @@ npm run dev
 **Response:**
 ```json
 {
-  "user_id": 1,
+  "user_id": Windows 10,
   "recommended_tracks": ["Song A", "Song B"]
 }
 ```
@@ -123,6 +123,6 @@ npm run dev
 Feel free to contribute to this project by submitting issues or pull requests.
 
 ---
-## License
-This project is licensed under the MIT License.
+## Acknowlegdement:
+CodeAlpha
 

@@ -579,3 +579,6 @@ make the application like that of a world standard application.
 
 
 also. from the start which is Iconbar.vue, give me each of them one by one. after which you ask me if it is okay, then we move to the next. I want a robust and complex application
+
+
+QYH5-3QGQ-R9K4-5FC2

@@ -1,21 +1,27 @@
-// src/utils/logger.js
-import winston from "winston";
+/* eslint-disable prettier/prettier */
 
-// Configure the logger
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.printf(
-      ({ level, message, timestamp }) =>
-        `[${timestamp}] ${level.toUpperCase()}: ${message}`,
-    ),
-  ),
-  transports: [
-    new winston.transports.Console(), // Log to the console
-    // Add a file transport if needed
-    new winston.transports.File({ filename: "app.log" }),
-  ],
-});
+const logger = {
+  info(message, ...optionalParams) {
+    if (process.env.NODE_ENV !== "production") {
+      console.info(`[INFO]: ${message}`, ...optionalParams);
+    }
+  },
+
+  warn(message, ...optionalParams) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(`[WARN]: ${message}`, ...optionalParams);
+    }
+  },
+
+  error(message, ...optionalParams) {
+    console.error(`[ERROR]: ${message}`, ...optionalParams);
+  },
+
+  debug(message, ...optionalParams) {
+    if (process.env.NODE_ENV !== "production") {
+      console.debug(`[DEBUG]: ${message}`, ...optionalParams);
+    }
+  },
+};
 
 export default logger;

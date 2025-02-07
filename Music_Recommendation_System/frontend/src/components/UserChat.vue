@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import logger from "@/utils/logger.js"
 export default {
   data() {
     return {
@@ -112,7 +113,7 @@ export default {
           text: data.reply || "No response from AI",
         });
       } catch (error) {
-        this.$logger.error("Error fetching chat response:", error);
+        logger.error("Error fetching chat response:", error);
         this.logError("Error fetching chat response", error); // Log error to backend
         this.messages.push({
           sender: "Lyrical AI",
@@ -130,45 +131,45 @@ export default {
           timestamp: new Date().toISOString(),
         })
         .catch((err) => {
-          this.$logger.error("Failed to log error:", err);
+          logger.error("Failed to log error:", err);
         });
     },
   },
 };
 </script>
-
 <style scoped>
 /* Responsive & Neumorphic Design Enhancements */
-.bg-gray-800 {
+::v-deep(.bg-gray-800) {
   box-shadow:
     inset 8px 8px 15px rgba(0, 0, 0, 0.2),
     inset -8px -8px 15px rgba(255, 255, 255, 0.1);
 }
 
-.bg-gray-900 {
+::v-deep(.bg-gray-900) {
   box-shadow:
     inset 8px 8px 15px rgba(0, 0, 0, 0.25),
     inset -8px -8px 15px rgba(255, 255, 255, 0.1);
 }
 
-button {
+::v-deep(button) {
   transition:
     transform 0.2s,
     box-shadow 0.2s;
 }
-button:hover {
+
+::v-deep(button:hover) {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.scrollbar-thin {
+::v-deep(.scrollbar-thin) {
   scrollbar-width: thin;
 }
 
-.scrollbar-thumb-indigo-500 {
+::v-deep(.scrollbar-thumb-indigo-500) {
   background-color: #667eea;
 }
 
-.scrollbar-track-gray-700 {
+::v-deep(.scrollbar-track-gray-700) {
   background-color: #2d3748;
 }
 
@@ -182,25 +183,25 @@ button:hover {
     transform: translateY(-10px);
   }
 }
-.animate-pulse {
+::v-deep(.animate-pulse) {
   animation: bounce 2s infinite;
 }
 
 /* Responsive Design */
 @media (max-width: 640px) {
-  .h-96 {
+  ::v-deep(.h-96) {
     height: 20rem;
   }
 
-  .max-w-md {
+  ::v-deep(.max-w-md) {
     width: 100%;
   }
 
-  input {
+  ::v-deep(input) {
     font-size: 0.9rem;
   }
 
-  button {
+  ::v-deep(button) {
     padding: 0.6rem 1rem;
   }
 }
